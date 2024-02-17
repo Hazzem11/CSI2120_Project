@@ -50,7 +50,7 @@ public class SimilaritySearch {
             // Print the names of the 5 most similar images
             System.out.println("5 most similar images to the query image:");
             for (int i = 0; i < 5 && i < sortedList.size(); i++) {
-                System.out.println(sortedList.get(i).getKey());
+                System.out.println(sortedList.get(i).getKey() + " - " + "Score: " + sortedList.get(i).getValue());
             }
 
         } catch (IOException e) {

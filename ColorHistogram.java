@@ -26,22 +26,24 @@ public class ColorHistogram {
         line = reader.readLine();
         
         reader.close();
-
+        
         values = line.split(" ");
-        this.histogram = new double[512];
+        this.histogram = new double[values.length]; // Correctly initialize the histogram size
         int index = 0;
-
+        int totalPixels = 0; // Variable to store the total sum of pixel values
+        
         for (String value : values) {
             int pixelValue = Integer.parseInt(value);
             histogram[index] = pixelValue;
+            totalPixels += pixelValue; // Accumulate the pixel values
             index++;
         }
-
+        
         // Normalize the histogram
-        int totalPixels = values.length;
         for (int i = 0; i < histogram.length; i++) {
-            histogram[i] /= totalPixels;
+            histogram[i] /= totalPixels; // Normalize by the total sum of pixel values
         }
+        
     }
 
     // Associate an image with a histogram instance
