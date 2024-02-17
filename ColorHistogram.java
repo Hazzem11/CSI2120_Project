@@ -19,23 +19,22 @@ public class ColorHistogram {
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String line;
 
-        // Skip the first line containing the image dimensions
+        // Skip the first line
         reader.readLine();
 
-        // Read the pixel values and compute the histogram
         String[] values;
-        StringBuilder content = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-            content.append(line).append(" ");
-        }
+        line = reader.readLine();
+        
         reader.close();
 
-        values = content.toString().trim().split("\\s+");
-        this.histogram = new double[256]; // Assuming pixel values range from 0 to 255
+        values = line.split(" ");
+        this.histogram = new double[512];
+        int index = 0;
 
         for (String value : values) {
             int pixelValue = Integer.parseInt(value);
-            histogram[pixelValue]++;
+            histogram[index] = pixelValue;
+            index++;
         }
 
         // Normalize the histogram
@@ -47,9 +46,7 @@ public class ColorHistogram {
 
     // Associate an image with a histogram instance
     public void setImage(ColorImage image) {
-        int bins = (int) Math.pow(2, 3 * d);
-        double[] histogram = new double[bins];
-        int totalPixels = image.getWidth() * image.getHeight();
+        int totalPixels = image.getWidth() * image.getHeight(); // Correctly calculate the total number of pixels
 
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
@@ -71,8 +68,6 @@ public class ColorHistogram {
         for (int i = 0; i < histogram.length; i++) {
             histogram[i] /= totalPixels;
         }
-
-        this.histogram = histogram;
     }
 
     // Get the normalized histogram of the image

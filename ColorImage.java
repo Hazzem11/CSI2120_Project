@@ -5,40 +5,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColorImage {
-    private List<List<Integer>> pixels;
+    private List<Integer> pixels;
     private int width;
     private int height;
     private int depth;
 
     // Constructor to create an image from a .ppm file
-    public ColorImage(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        String dimensions = reader.readLine(); // Width Height
-        String maxColorValue = reader.readLine(); // Maximum color value (depth)
+  public ColorImage(String filename) throws IOException {
+    BufferedReader reader = new BufferedReader(new FileReader(filename));
 
-        String[] dimensionValues = dimensions.split(" ");
-        this.width = Integer.parseInt(dimensionValues[0]);
-        this.height = Integer.parseInt(dimensionValues[1]);
-        this.depth = Integer.parseInt(maxColorValue);
+    reader.readLine(); 
+    reader.readLine(); // Skips first 2 lines of the text file
 
-        this.pixels = new ArrayList<>();
+    String dimensions = reader.readLine(); // Width Height
+    String maxColorValue = reader.readLine(); // Maximum color value (depth)
 
-        for (int i = 0; i < height; i++) {
-            List<Integer> row = new ArrayList<>();
-            String[] pixelValues = reader.readLine().split(" ");
-            for (int j = 0; j < pixelValues.length; j += 3) {
-                int R = Integer.parseInt(pixelValues[j]);
-                int G = Integer.parseInt(pixelValues[j + 1]);
-                int B = Integer.parseInt(pixelValues[j + 2]);
-                row.add(R);
-                row.add(G);
-                row.add(B);
-            }
-            pixels.add(row);
+    String[] dimensionValues = dimensions.split(" ");
+    this.width = Integer.parseInt(dimensionValues[0]);
+    this.height = Integer.parseInt(dimensionValues[1]);
+    this.depth = Integer.parseInt(maxColorValue);
+
+    this.pixels = new ArrayList<>();
+
+    String line;
+    while ((line = reader.readLine()) != null) {
+        String[] pixelValues = line.split(" ");
+        for (int j = 0; j < pixelValues.length; j++) {
+            int pixelValue = Integer.parseInt(pixelValues[j]);
+            pixels.add(pixelValue);
         }
-
-        reader.close();
     }
+
+    reader.close();
+}
+
 
     public int getWidth() {
         return width;
@@ -53,17 +53,23 @@ public class ColorImage {
     }
 
     public List<Integer> getPixel(int i, int j) {
-        return pixels.get(i * width + j);
+        int index = (j * width + i) * 3; // Each pixel has three values (RGB)
+        int R = pixels.get(index);
+        int G = pixels.get(index + 1);
+        int B = pixels.get(index + 2);
+        List<Integer> pixelValues = new ArrayList<>();
+        pixelValues.add(R);
+        pixelValues.add(G);
+        pixelValues.add(B);
+        return pixelValues;
     }
+    
 
     public void reduceColor(int d) {
-
-        for (List<Integer> row : pixels) {
-            for (int i = 0; i < row.size(); i++) {
-                int colorValue = row.get(i);
-                int newValue = colorValue >> (8 - d);
-                row.set(i, newValue);
-            }
+        for (int i = 0; i < pixels.size(); i++) {
+            int colorValue = pixels.get(i);
+            int newValue = colorValue >> (8 - d);
+            pixels.set(i, newValue);
         }
 
         this.depth = d;
