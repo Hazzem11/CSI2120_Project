@@ -1,3 +1,6 @@
+// Hazzem Sukar 300286631
+// Joseph Sreih
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -22,12 +25,12 @@ public class SimilaritySearch {
                 return;
             }
 
-            // Load query image and compute its histogram
+            // Load query image
             ColorImage queryImage = new ColorImage(queryImageFile.getAbsolutePath());
             ColorHistogram queryHistogram = new ColorHistogram(3); // Assume 3-bit color reduction
             queryHistogram.setImage(queryImage);
 
-            // Load image dataset and pre-computed histograms
+            // Load image dataset
             File dataset = new File(datasetDirectory);
             File[] imageFiles = dataset.listFiles((dir, name) -> name.toLowerCase().endsWith(".jpg.txt"));
             List<ColorHistogram> histograms = new ArrayList<>();
@@ -36,18 +39,17 @@ public class SimilaritySearch {
                 histograms.add(histogram);
             }
 
-            // Compute similarity scores for each image in the dataset
+            // Find similarity scores
             Map<String, Double> similarityScores = new HashMap<>();
             for (int i = 0; i < histograms.size(); i++) {
                 double similarity = queryHistogram.compare(histograms.get(i));
                 similarityScores.put(imageFiles[i].getName(), similarity);
             }
 
-            // Sort the images by similarity scores
+            // Sort by similarity scores
             List<Map.Entry<String, Double>> sortedList = new ArrayList<>(similarityScores.entrySet());
             sortedList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
-            // Print the names of the 5 most similar images
             System.out.println("5 most similar images to the query image:");
             for (int i = 0; i < 5 && i < sortedList.size(); i++) {
                 System.out.println(sortedList.get(i).getKey() + " - " + "Score: " + sortedList.get(i).getValue());

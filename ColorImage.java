@@ -1,3 +1,6 @@
+// Hazzem Sukar 300286631
+// Joseph Sreih
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,35 +13,33 @@ public class ColorImage {
     private int height;
     private int depth;
 
-    // Constructor to create an image from a .ppm file
-  public ColorImage(String filename) throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(filename));
+    public ColorImage(String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
 
-    reader.readLine(); 
-    reader.readLine(); // Skips first 2 lines of the text file
+        reader.readLine();
+        reader.readLine(); // Skip first 2 lines of the text file
 
-    String dimensions = reader.readLine(); // Width Height
-    String maxColorValue = reader.readLine(); // Maximum color value (depth)
+        String dimensions = reader.readLine();
+        String maxColorValue = reader.readLine();
 
-    String[] dimensionValues = dimensions.split(" ");
-    this.width = Integer.parseInt(dimensionValues[0]);
-    this.height = Integer.parseInt(dimensionValues[1]);
-    this.depth = Integer.parseInt(maxColorValue);
+        String[] dimensionValues = dimensions.split(" ");
+        this.width = Integer.parseInt(dimensionValues[0]);
+        this.height = Integer.parseInt(dimensionValues[1]);
+        this.depth = Integer.parseInt(maxColorValue);
 
-    this.pixels = new ArrayList<>();
+        this.pixels = new ArrayList<>();
 
-    String line;
-    while ((line = reader.readLine()) != null) {
-        String[] pixelValues = line.split(" ");
-        for (int j = 0; j < pixelValues.length; j++) {
-            int pixelValue = Integer.parseInt(pixelValues[j]);
-            pixels.add(pixelValue);
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] pixelValues = line.split(" ");
+            for (int j = 0; j < pixelValues.length; j++) {
+                int pixelValue = Integer.parseInt(pixelValues[j]);
+                pixels.add(pixelValue);
+            }
         }
+
+        reader.close();
     }
-
-    reader.close();
-}
-
 
     public int getWidth() {
         return width;
@@ -53,7 +54,9 @@ public class ColorImage {
     }
 
     public List<Integer> getPixel(int i, int j) {
-        int index = (j * width + i) * 3; // Each pixel has three values (RGB)
+        // Applying 2D coordinates (i,j) to a 1D data struture to find the pixel. Each
+        // pixel has three values (RGB) so we multiply by 3.
+        int index = (j * width + i) * 3;
         int R = pixels.get(index);
         int G = pixels.get(index + 1);
         int B = pixels.get(index + 2);
@@ -63,7 +66,6 @@ public class ColorImage {
         pixelValues.add(B);
         return pixelValues;
     }
-    
 
     public void reduceColor(int d) {
         for (int i = 0; i < pixels.size(); i++) {
