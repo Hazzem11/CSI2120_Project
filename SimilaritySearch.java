@@ -29,6 +29,7 @@ public class SimilaritySearch {
             ColorImage queryImage = new ColorImage(queryImageFile.getAbsolutePath());
             ColorHistogram queryHistogram = new ColorHistogram(3); // Assume 3-bit color reduction
             queryHistogram.setImage(queryImage);
+            queryHistogram.save(queryImgFileInput + ".txt");
 
             // Load image dataset
             File dataset = new File(datasetDirectory);

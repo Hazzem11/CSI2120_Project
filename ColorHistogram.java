@@ -92,7 +92,7 @@ public class ColorHistogram {
         for (int i = 0; i < histogram.length; i++) {
             writer.write(String.valueOf(histogram[i]));
             if (i != histogram.length - 1) {
-                writer.write(",");
+                writer.write(" ");
             }
         }
         writer.close();
